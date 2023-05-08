@@ -1,5 +1,6 @@
 # Import libraries
 import tensorflow
+import numpy
 
 # Define the input shape
 input_shape = (None, None, 3)
