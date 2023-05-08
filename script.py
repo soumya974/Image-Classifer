@@ -20,5 +20,11 @@ train_datagen = tensorflow.keras.preprocessing.image.ImageDataGenerator(rescale=
 train_generator = train_datagen.flow_from_directory('path/to/training/dataset', target_size=input_shape[:2], batch_size=batch_size, class_mode='categorical')
 validation_datagen  = tensorflow.keras.preprocessing.image.ImageDataGenerator(rescale=1./255, preprocessing_function=tensorflow.keras.applications.resnet50.preprocess_input)
 validation_generator  = validation_datagen.flow_from_directory('path/to/training/dataset', target_size=input_shape[:2], batch_size=batch_size, class_mode='categorical')
+# Add batch normalization and dropout to improve the network's generalization ability
+model.add(tensorflow.keras.layers.BatchNormalization())
+model.add(tensorflow.keras.layers.Dropout(0.5))
+# Define callbacks for early stopping and learning rate scheduling
+early_stopping_cb = tensorflow.keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True)
+lr_scheduler_cb = tensorflow.keras.callbacks.LearningRateScheduler(lr_schedule)
 # Train the model
-model.fit(train_generator, steps_per_epoch=steps_per_epoch, epochs=num_epochs, validation_data=validation_generator, validation_steps=validation_steps)
+model.fit(train_generator, steps_per_epoch=steps_per_epoch, epochs=num_epochs, validation_data=validation_generator, validation_steps=validation_steps, callbacks=[early_stopping_cb, lr_scheduler_cb])
