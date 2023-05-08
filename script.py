@@ -1,3 +1,4 @@
+# Import libraries
 import tensorflow
 
 # Define the input shape
